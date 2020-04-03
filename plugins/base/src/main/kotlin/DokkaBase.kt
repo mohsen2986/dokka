@@ -154,4 +154,8 @@ class DokkaBase : DokkaPlugin() {
     val styleAndScriptsAppender by extending {
         htmlPreprocessors with StyleAndScriptsAppender order { after(rootCreator) }
     }
+
+    val packageListCreator by extending {
+        htmlPreprocessors providing ::PackageListCreator order { after(rootCreator) }
+    }
 }
