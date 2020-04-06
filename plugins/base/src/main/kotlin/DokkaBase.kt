@@ -156,6 +156,6 @@ class DokkaBase : DokkaPlugin() {
     }
 
     val packageListCreator by extending {
-        htmlPreprocessors providing ::PackageListCreator order { after(rootCreator) }
+        htmlPreprocessors providing { PackageListCreator(it, "html", "html") } order { after(rootCreator) }
     }
 }
