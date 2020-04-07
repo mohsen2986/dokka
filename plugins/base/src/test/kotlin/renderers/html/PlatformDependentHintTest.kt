@@ -1,5 +1,6 @@
 package renderers.html
 
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.dokka.Platform
 import org.jetbrains.dokka.base.renderers.html.HtmlRenderer
 import org.jetbrains.dokka.pages.PlatformData
@@ -25,7 +26,12 @@ class PlatformDependentHintTest : RenderingOnlyTestBase() {
             }
         }
 
-        HtmlRenderer(context).render(page)
+        runBlocking {
+            val scope = this
+            with(HtmlRenderer(context)) {
+                scope.render(page)
+            }
+        }
         renderedContent.match(Div("abc"))
     }
 
@@ -39,7 +45,12 @@ class PlatformDependentHintTest : RenderingOnlyTestBase() {
             }
         }
 
-        HtmlRenderer(context).render(page)
+        runBlocking {
+            val scope = this
+            with(HtmlRenderer(context)) {
+                scope.render(page)
+            }
+        }
         renderedContent.match("[js]", Div("a"), "[jvm]",  Div("b"), "[native]", Div("c"))
     }
 
@@ -53,7 +64,12 @@ class PlatformDependentHintTest : RenderingOnlyTestBase() {
             }
         }
 
-        HtmlRenderer(context).render(page)
+        runBlocking {
+            val scope = this
+            with(HtmlRenderer(context)) {
+                scope.render(page)
+            }
+        }
         renderedContent.match("[js]", Div("ab"), "[jvm]", Div("bc"))
     }
 
@@ -67,7 +83,12 @@ class PlatformDependentHintTest : RenderingOnlyTestBase() {
             }
         }
 
-        HtmlRenderer(context).render(page)
+        runBlocking {
+            val scope = this
+            with(HtmlRenderer(context)) {
+                scope.render(page)
+            }
+        }
         renderedContent.match(Div("ab"))
     }
 
@@ -83,7 +104,12 @@ class PlatformDependentHintTest : RenderingOnlyTestBase() {
             }
         }
 
-        HtmlRenderer(context).render(page)
+        runBlocking {
+            val scope = this
+            with(HtmlRenderer(context)) {
+                scope.render(page)
+            }
+        }
         renderedContent.match("[js]", Div(Div("ab")), "[jvm]", Div(Div("a"), "b"))
     }
 
@@ -99,7 +125,12 @@ class PlatformDependentHintTest : RenderingOnlyTestBase() {
             }
         }
 
-        HtmlRenderer(context).render(page)
+        runBlocking {
+            val scope = this
+            with(HtmlRenderer(context)) {
+                scope.render(page)
+            }
+        }
         println(renderedContent)
         renderedContent.match("ab")
     }
@@ -114,7 +145,12 @@ class PlatformDependentHintTest : RenderingOnlyTestBase() {
             }
         }
 
-        HtmlRenderer(context).render(page)
+        runBlocking {
+            val scope = this
+            with(HtmlRenderer(context)) {
+                scope.render(page)
+            }
+        }
         renderedContent.match("[js, jvm]", Div("a"), "[native]",  Div("b"))
     }
 }
