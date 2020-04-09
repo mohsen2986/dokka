@@ -3,8 +3,8 @@ package org.jetbrains.dokka.gfm
 import org.jetbrains.dokka.CoreExtensions
 import org.jetbrains.dokka.base.DokkaBase
 import org.jetbrains.dokka.base.renderers.DefaultRenderer
-import org.jetbrains.dokka.base.renderers.html.PackageListCreator
-import org.jetbrains.dokka.base.renderers.html.RootCreator
+import org.jetbrains.dokka.base.renderers.PackageListCreator
+import org.jetbrains.dokka.base.renderers.RootCreator
 import org.jetbrains.dokka.base.resolvers.local.DefaultLocationProvider
 import org.jetbrains.dokka.base.resolvers.local.LocationProviderFactory
 import org.jetbrains.dokka.pages.*
@@ -33,7 +33,13 @@ class GfmPlugin : DokkaPlugin() {
     }
 
     val packageListCreator by extending {
-        gfmPreprocessors providing { PackageListCreator(it, "gfm", "md") } order { after(rootCreator) }
+        gfmPreprocessors providing {
+            PackageListCreator(
+                it,
+                "gfm",
+                "md"
+            )
+        } order { after(rootCreator) }
     }
 }
 

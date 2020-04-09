@@ -1,8 +1,8 @@
 package org.jetbrains.dokka.jekyll
 
 import org.jetbrains.dokka.CoreExtensions
-import org.jetbrains.dokka.base.renderers.html.PackageListCreator
-import org.jetbrains.dokka.base.renderers.html.RootCreator
+import org.jetbrains.dokka.base.renderers.PackageListCreator
+import org.jetbrains.dokka.base.renderers.RootCreator
 import org.jetbrains.dokka.gfm.CommonmarkRenderer
 import org.jetbrains.dokka.pages.*
 import org.jetbrains.dokka.plugability.DokkaContext
@@ -26,7 +26,13 @@ class JekyllPlugin : DokkaPlugin() {
     }
 
     val packageListCreator by extending {
-        jekyllPreprocessors providing { PackageListCreator(it, "jekyll", "md") } order { after(rootCreator) }
+        jekyllPreprocessors providing {
+            PackageListCreator(
+                it,
+                "jekyll",
+                "md"
+            )
+        } order { after(rootCreator) }
     }
 }
 

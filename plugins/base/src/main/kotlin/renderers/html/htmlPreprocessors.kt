@@ -4,16 +4,10 @@ import kotlinx.html.h1
 import kotlinx.html.id
 import kotlinx.html.table
 import kotlinx.html.tbody
-import org.jetbrains.dokka.base.renderers.PackageListService
 import org.jetbrains.dokka.base.renderers.platforms
 import org.jetbrains.dokka.pages.*
-import org.jetbrains.dokka.plugability.DokkaContext
 import org.jetbrains.dokka.transformers.pages.PageTransformer
 
-object RootCreator : PageTransformer {
-    override fun invoke(input: RootPageNode) =
-        RendererSpecificRootPage("", listOf(input), RenderingStrategy.DoNothing)
-}
 
 object SearchPageInstaller : PageTransformer {
     override fun invoke(input: RootPageNode) = input.modified(children = input.children + searchPage)
@@ -39,19 +33,22 @@ object SearchPageInstaller : PageTransformer {
 object NavigationPageInstaller : PageTransformer {
     override fun invoke(input: RootPageNode) = input.modified(
         children = input.children + NavigationPage(
-            input.children.filterIsInstance<ContentPage>().single().let(::visit)
+            input.children.filterIsInstance<ContentPage>().single()
+                .let(NavigationPageInstaller::visit)
         )
     )
 
-    private fun visit(page: ContentPage): NavigationNode = NavigationNode(
-        page.name,
-        page.dri.first(),
-        page.platforms(),
-        if (page !is ClasslikePageNode)
-            page.children.filterIsInstance<ContentPage>().map { visit(it) }
-        else
-            emptyList()
-    )
+    private fun visit(page: ContentPage): NavigationNode =
+        NavigationNode(
+            page.name,
+            page.dri.first(),
+            page.platforms(),
+            if (page !is ClasslikePageNode)
+                page.children.filterIsInstance<ContentPage>()
+                    .map { visit(it) }
+            else
+                emptyList()
+        )
 }
 
 object ResourceInstaller : PageTransformer {
@@ -72,15 +69,3 @@ object StyleAndScriptsAppender : PageTransformer {
         )
     }
 }
-
-class PackageListCreator(val context: DokkaContext, val format: String, val linkExtension: String) : PageTransformer {
-    override fun invoke(input: RootPageNode) = input.modified(children = input.children + packageList(input))
-
-    private fun packageList(pageNode: RootPageNode) =
-        RendererSpecificRootPage(
-            "${pageNode.name}/package-list",
-            emptyList(),
-            RenderingStrategy.Write(PackageListService(context).formatPackageList(pageNode, format, linkExtension))
-        )
-}
-
