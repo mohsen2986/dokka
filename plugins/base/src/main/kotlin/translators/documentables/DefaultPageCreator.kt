@@ -228,7 +228,7 @@ open class DefaultPageCreator(
 
         fun DocumentableContentBuilder.contentForDescription() {
             val description = tags.withTypeUnnamed<Description>()
-            if (description.any { it.value.root.children.isNotEmpty() }) {
+            if (tags[Description::class]?.any { it.second.root.children.isNotEmpty() } == true) {
                 platforms.forEach { platform ->
                     description.getOrExpect(platform)?.also {
                         group(platformData = setOf(platform)) {
